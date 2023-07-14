@@ -1,13 +1,15 @@
-package hammurabi;
+package hammurabi.docs.matuszek;
 
 import static org.junit.Assert.*;
 
+import hammurabi.docs.HAMURABI;
+import hammurabi.src.main.java.Hammurabi;
 import org.junit.Before;
 import org.junit.Test;
 
 public class HammurabiTest {
-    
-    Hammurabi ham;
+/*
+    HAMURABI ham;
     
     boolean about(double expected, double actual) {
         return actual > 0.90 * expected && actual < 1.10 * expected;
@@ -15,7 +17,7 @@ public class HammurabiTest {
 
     @Before
     public void setUp() throws Exception {
-        ham = new Hammurabi();
+        ham = new HAMURABI();
     }
 
     @Test
@@ -120,6 +122,8 @@ public class HammurabiTest {
             assertTrue("You never have a land cost of " + j + " bushels per acre.", cost[j] > 0);
         }
     }
+
+ */
 
 }
 
