@@ -147,5 +147,23 @@ public class HammurabiTest {
         int expected = 5;
         assertEquals(expected, actual);
     }
+    /*
+    @Test
+    public void testGrainsEatenByRats(){
+        Hammurabi hamm = new Hammurabi();
+        int actual = hamm.grainEatenByRats(100);
+        int expected = 5;
+        assertEquals(expected, actual);
+    }
+
+     */
+
+    @Test
+    public void testNewLandCost(){
+        Hammurabi hamm = new Hammurabi();
+        int actual = hamm.newCostOfLand();
+        int expected = 0;
+        assertEquals(expected, actual);
+    }
 }
 

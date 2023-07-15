@@ -23,61 +23,124 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
         int bushelOfGrain = 28000;
         int acresOfLand = 1000;
         int landValue = 19;
-        int outcome, foodForPeasants,numOfImmigrant;
-//        int foodForPeasants;
-        //Checks if you want to buy land. If the number is zero or less, it asks if you want to sell land.
-        outcome = askHowManyAcresToBuy(landValue, bushelOfGrain);
-        if(outcome > 0){
-            bushelOfGrain = bushelOfGrain - (outcome * landValue);
-            acresOfLand += outcome;
-            logger.info("Current Bushels: " + bushelOfGrain + " Acres of Land: " + acresOfLand);
-        }else if(outcome <= 0){
-            outcome = askHowManyAcresToSell(acresOfLand);
-            acresOfLand = acresOfLand - outcome;
-            bushelOfGrain = bushelOfGrain + (outcome * landValue);
-            logger.info("Current Bushels: " + bushelOfGrain + " Acres of Land: " + acresOfLand);
+        int year = 1;
+        int outcome, foodForPeasants;
+        int numOfImmigrant = 0;
+        boolean uprising = false;
+
+        while(year <= 10 && !uprising) {
+
+            //Checks if you want to buy land. If the number is zero or less, it asks if you want to sell land.
+            outcome = askHowManyAcresToBuy(landValue, bushelOfGrain);
+            if (outcome > 0) {
+                bushelOfGrain = bushelOfGrain - (outcome * landValue);
+                acresOfLand += outcome;
+                logger.info("Current Bushels: " + bushelOfGrain + " Acres of Land: " + acresOfLand);
+            } else if (outcome <= 0) {
+                outcome = askHowManyAcresToSell(acresOfLand);
+                acresOfLand = acresOfLand - outcome;
+                bushelOfGrain = bushelOfGrain + (outcome * landValue);
+                logger.info("Current Bushels: " + bushelOfGrain + " Acres of Land: " + acresOfLand);
+            }
+
+            //Asks how much grain to feed the peasants
+            foodForPeasants = askHowMuchGrainToFeedPeople(bushelOfGrain);
+            bushelOfGrain = bushelOfGrain - foodForPeasants; //Current up to date grain value
+            logger.info("Food for the people " + foodForPeasants + " left over grain " + bushelOfGrain);
+
+            //Get how many acres to plant
+            int acresToPlant = askHowManyAcresToPlant(acresOfLand, people, bushelOfGrain);
+
+
+            int numPlagueDeath = plagueDeaths(people);
+            people = people - numPlagueDeath;
+
+            //gathers the number of starvation deaths
+            int starvationDeaths = starvationDeaths(people, foodForPeasants);
+            logger.info("Starvation death count: " + starvationDeaths);
+
+            //checks to see if enough people died for an uprising
+            uprising = uprising(people, starvationDeaths);
+
+            //if no one starves, we can get Immigrants
+            if (starvationDeaths == 0) {
+                numOfImmigrant = immigrants(people, acresOfLand, bushelOfGrain);
+                logger.info("Immigrants generated: " + numOfImmigrant);
+                people = people + numOfImmigrant;
+            }
+
+            //figures out how much harvest we get
+            int harvested = harvest(acresOfLand, bushelOfGrain); // not sure why this takes 2 params
+
+
+            //Figure out how much if any grain is eaten by rats
+            int eatenByRats = grainEatenByRats(bushelOfGrain);
+
+            landValue = newCostOfLand();
+
+            year++;
+            printSummary(year,starvationDeaths, numOfImmigrant, people, harvested, eatenByRats, bushelOfGrain, acresOfLand, landValue);
         }
 
-        //Asks how much grain to feed the peasants
-        foodForPeasants = askHowMuchGrainToFeedPeople(bushelOfGrain);
-        bushelOfGrain -= foodForPeasants;
-        logger.info("Food for the people " + foodForPeasants + " left over grain " + bushelOfGrain);
-
-        //Get how many acres to plant
-        outcome = askHowManyAcresToPlant(acresOfLand, people, bushelOfGrain);
 
 
-        int numPlagueDeath = plagueDeaths(people);
+    }
 
-        //gathers the number of starvation deaths
-        int starvationDeaths = starvationDeaths(people, foodForPeasants);
-        logger.info("Starvation death count: " + starvationDeaths);
 
-        //checks to see if enough people died for an uprising
-        boolean uprising = uprising(people, starvationDeaths);
+    public void printSummary(int currentYear, int starvationDeaths, int immigrants, int currentPop, int harvest, int eatenByRats,
+                            int bushelsOfGrian, int land, int landValue ){
+        StringBuilder sb = new StringBuilder();
+        sb.append("O great Hammurabi!\n");
+        sb.append("You are in year " + currentYear + " of your ten year rule\n");
+        sb.append("In the previous year" + starvationDeaths + " people starved to death.\n");
+        sb.append("In the previous year " + immigrants + " people entered the kingdom.\n");
+        sb.append("The population is now " + currentPop + ".\n");
+        sb.append("We harvested " + harvest + " bushels at " + (harvest/land) + " bushels per acre.\n");
+        sb.append("Rats destroyed " + eatenByRats + " bushels, leaving " + bushelsOfGrian + " bushels in storage.\n");
+        sb.append("The city owns "+ land + " acres of land.\n");
+        sb.append("Land is currently worth "+ landValue + " bushels per acre.\n");
+        System.out.println(sb.toString());
+    }
 
-        if(starvationDeaths == 0){
-            numOfImmigrant = immigrants(people, acresOfLand, bushelOfGrain);
-            logger.info("Immigrants generated: ");
+
+    public int newCostOfLand(){
+        return (rand.nextInt(7) +17);
+    }
+    public int grainEatenByRats(int bushels) {
+        double percentEaten = 0;
+        if(rand.nextInt(100)+1 >= 40){
+            percentEaten = rand.nextInt(21) + 10;
+            logger.info(percentEaten +"% of grains eaten");
+            percentEaten = percentEaten/100;
         }
+        if(percentEaten != 0){
+            bushels = (int)(bushels * percentEaten);
+            logger.info(bushels + " is the number of bushels eaten");
+            return bushels;
+
+        }
+        return 0;
+    }
+
+    public int harvest(int acres, int bushelsUsedAsSeed){
+        int bushelsPerAcre = rand.nextInt(6) + 1;
+        logger.info(bushelsPerAcre + " is the bushels per acre");
+        return acres* bushelsPerAcre;
     }
 
     public int immigrants(int population, int acresOwned, int grainInStorage){
        return (20 * acresOwned+ grainInStorage) / (100 * population) + 1;
     }
 
-
-
-
     public boolean uprising(int population, int howManyPeopleStarved){
-        double hold = (double) howManyPeopleStarved/(double) population;
-        logger.info("% that starved " + hold);
-        if(hold >= 0.45){
-            return true;
+        if(howManyPeopleStarved != 0){
+            double hold = (double) howManyPeopleStarved/(double) population;
+            logger.info("% that starved " + hold);
+            if(hold >= 0.45){
+                return true;
+            }
         }
-        else{
-            return false;
-        }
+        return false;
     }
 
     public int starvationDeaths(int population, int bushelsFedToPeople){
@@ -91,7 +154,6 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
         }
     }
 
-
     public int plagueDeaths(int population){
         int outcome;
         outcome = rand.nextInt(100) + 1;
@@ -102,8 +164,6 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
         logger.info("No plague this year");
         return population;
     }
-
-
 
     public int askHowManyAcresToPlant(int acresOwned, int population, int bushels){
         String question = "O Great Hammurabi, how many acres would you like to plant? ";
