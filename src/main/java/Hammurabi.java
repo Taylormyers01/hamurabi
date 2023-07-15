@@ -23,8 +23,8 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
         int bushelOfGrain = 28000;
         int acresOfLand = 1000;
         int landValue = 19;
-        int outcome;
-        int foodForPeasants;
+        int outcome, foodForPeasants,numOfImmigrant;
+//        int foodForPeasants;
         //Checks if you want to buy land. If the number is zero or less, it asks if you want to sell land.
         outcome = askHowManyAcresToBuy(landValue, bushelOfGrain);
         if(outcome > 0){
@@ -47,11 +47,65 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
         outcome = askHowManyAcresToPlant(acresOfLand, people, bushelOfGrain);
 
 
+        int numPlagueDeath = plagueDeaths(people);
 
+        //gathers the number of starvation deaths
+        int starvationDeaths = starvationDeaths(people, foodForPeasants);
+        logger.info("Starvation death count: " + starvationDeaths);
 
+        //checks to see if enough people died for an uprising
+        boolean uprising = uprising(people, starvationDeaths);
+
+        if(starvationDeaths == 0){
+            numOfImmigrant = immigrants(people, acresOfLand, bushelOfGrain);
+            logger.info("Immigrants generated: ");
+        }
     }
 
-    private int askHowManyAcresToPlant(int acresOwned, int population, int bushels){
+    public int immigrants(int population, int acresOwned, int grainInStorage){
+       return (20 * acresOwned+ grainInStorage) / (100 * population) + 1;
+    }
+
+
+
+
+    public boolean uprising(int population, int howManyPeopleStarved){
+        double hold = (double) howManyPeopleStarved/(double) population;
+        logger.info("% that starved " + hold);
+        if(hold >= 0.45){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public int starvationDeaths(int population, int bushelsFedToPeople){
+        if(population*20 <= bushelsFedToPeople) {
+            return 0;
+        }else if (bushelsFedToPeople >= 20){
+            return population= population - (bushelsFedToPeople/20);
+        }
+        else{
+            return population;
+        }
+    }
+
+
+    public int plagueDeaths(int population){
+        int outcome;
+        outcome = rand.nextInt(100) + 1;
+        if (outcome <= 15){
+            logger.info("A plague has been triggered ");
+            return population/2;
+        }
+        logger.info("No plague this year");
+        return population;
+    }
+
+
+
+    public int askHowManyAcresToPlant(int acresOwned, int population, int bushels){
         String question = "O Great Hammurabi, how many acres would you like to plant? ";
         int outcome;
         while(true) {
@@ -66,7 +120,7 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
     }
 
 
-    private int askHowMuchGrainToFeedPeople(int bushels){
+    public int askHowMuchGrainToFeedPeople(int bushels){
         String question = "O Great Hammurabi, how much shall we feed the people? ";
         int outcome;
         while(true) {
@@ -79,7 +133,7 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
         }
 
     }
-    private int askHowManyAcresToSell(int acresOwned){
+    public int askHowManyAcresToSell(int acresOwned){
         String question = "O Great Hammurabi, how many acres would you like to sell? ";
         while(true) {
             int outcome = getNumber(question);
@@ -91,7 +145,7 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
         }
     }
 
-    private int askHowManyAcresToBuy(int price, int bushels){
+    public int askHowManyAcresToBuy(int price, int bushels){
         String question = "O Great Hammurabi, how many acres do you wish to buy? ";
         while(true) {
             int outcome = getNumber(question);
@@ -112,7 +166,7 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
      * @param message The request to present to the user.
      * @return The user's numeric response.
      */
-    private int getNumber(String message) {
+    public int getNumber(String message) {
         while (true) {
             System.out.print(message);
             try {

@@ -3,6 +3,7 @@ package hammurabi;
 import static org.junit.Assert.*;
 
 import hammurabi.src.main.java.Hammurabi;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -123,6 +124,28 @@ public class HammurabiTest {
     }
 
      */
+    @Test
+    public void starvationTest(){
+        int expected = 0;
+        Hammurabi hamm = new Hammurabi();
+        int actual = hamm.starvationDeaths(2, 41);
 
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void uprisingTest(){
+        Hammurabi hamm = new Hammurabi();
+        boolean actual =  hamm.uprising(100, 45);
+        assertTrue(actual);
+    }
+
+    @Test
+    public void testImigration(){
+        Hammurabi hamm = new Hammurabi();
+        int actual = hamm.immigrants(100, 1000, 28000);
+        int expected = 5;
+        assertEquals(expected, actual);
+    }
 }
 
