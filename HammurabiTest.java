@@ -126,9 +126,9 @@ public class HammurabiTest {
      */
     @Test
     public void starvationTest(){
-        int expected = 0;
+        int expected = 100;
         Hammurabi hamm = new Hammurabi();
-        int actual = hamm.starvationDeaths(2, 41);
+        int actual = hamm.starvationDeaths(100, 0);
 
         Assert.assertEquals(expected, actual);
     }
@@ -136,7 +136,7 @@ public class HammurabiTest {
     @Test
     public void uprisingTest(){
         Hammurabi hamm = new Hammurabi();
-        boolean actual =  hamm.uprising(100, 45);
+        boolean actual =  hamm.uprising(100, 44);
         assertTrue(actual);
     }
 

@@ -11,22 +11,22 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
     Scanner scanner = new Scanner(System.in);
 
     static Logger logger = Logger.getLogger("Hammurabi.log");
-
+    boolean uprising = false;
+    int overallStarvDeath = 0;
     public static void main(String[] args) {
         logger.setLevel(Level.INFO);
         new Hammurabi().playGame();
     }
 
+    int year = 1;
     void playGame() {
         logger.info("The game has started");
         int people = 100;
         int bushelOfGrain = 28000;
         int acresOfLand = 1000;
         int landValue = 19;
-        int year = 1;
         int outcome, foodForPeasants;
         int numOfImmigrant = 0;
-        boolean uprising = false;
 
         while(year <= 10 && !uprising) {
 
@@ -55,13 +55,17 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
             int numPlagueDeath = plagueDeaths(people);
             people = people - numPlagueDeath;
 
+            logger.info("People before starvation count " + people);
             //gathers the number of starvation deaths
             int starvationDeaths = starvationDeaths(people, foodForPeasants);
+            overallStarvDeath += starvationDeaths;
             logger.info("Starvation death count: " + starvationDeaths);
 
             //checks to see if enough people died for an uprising
             uprising = uprising(people, starvationDeaths);
-
+            if(uprising){
+                break;
+            }
             //if no one starves, we can get Immigrants
             if (starvationDeaths == 0) {
                 numOfImmigrant = immigrants(people, acresOfLand, bushelOfGrain);
@@ -82,10 +86,26 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
             printSummary(year,starvationDeaths, numOfImmigrant, people, harvested, eatenByRats, bushelOfGrain, acresOfLand, landValue);
         }
 
-
+        gameSummary();
 
     }
 
+
+    public void gameSummary(){
+        StringBuilder sb = new StringBuilder();
+        if(uprising){
+            //message about losing due ot uprising
+            sb.append("O great Hammurabi, we must leave the city, the people rebel!\n");
+            sb.append("Game over - you've been thrown out of office\n");
+            sb.append("During your reign, " + overallStarvDeath + " citizens have died of starvation.\n");
+        }else if(year == 11){
+            //message about being a good ruler and working full term
+            sb.append("O great Hammurabi, the people rejoice!!\n");
+            sb.append("You win!  - you've maintained your empire for your 10 year reign\n");
+            sb.append("During your reign, " + overallStarvDeath + " citizens have died of starvation.\n");
+        }
+        System.out.println(sb.toString());
+    }
 
     public void printSummary(int currentYear, int starvationDeaths, int immigrants, int currentPop, int harvest, int eatenByRats,
                             int bushelsOfGrian, int land, int landValue ){
@@ -162,7 +182,7 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
             return population/2;
         }
         logger.info("No plague this year");
-        return population;
+        return 0;
     }
 
     public int askHowManyAcresToPlant(int acresOwned, int population, int bushels){
