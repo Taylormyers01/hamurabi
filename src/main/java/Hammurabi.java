@@ -1,12 +1,14 @@
 package hammurabi.src.main.java;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Hammurabi {         // must save in a file named Hammurabi.java
+public class Hammurabi extends JFrame {         // must save in a file named Hammurabi.java
     Random rand = new Random();  // this is an instance variable
     Scanner scanner = new Scanner(System.in);
 
@@ -28,6 +30,21 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
         int landValue = 19;
         int outcome, foodForPeasants;
         int numOfImmigrant = 0;
+//        JLabel peopleL, bushelOfGrainL, acresOfLandL, landValueL;
+//
+//        peopleL = new JLabel();
+//        peopleL.setFont(new Font("Ink Free",Font.BOLD,15));
+//        this.add(peopleL);
+//
+//        peopleL.setText("People: " + people);
+//
+//        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        this.setTitle("Hammurabi");
+//        this.setLayout(new FlowLayout());
+//        this.setSize(438, 320); //350 220
+//        this.setResizable(false);
+//
+//        this.setVisible(true);
 
         while(year <= 10 && !uprising) {
 
