@@ -60,6 +60,8 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
             int starvationDeaths = starvationDeaths(people, foodForPeasants);
             overallStarvDeath += starvationDeaths;
             logger.info("Starvation death count: " + starvationDeaths);
+            people = people - starvationDeaths;
+
 
             //checks to see if enough people died for an uprising
             uprising = uprising(people, starvationDeaths);
@@ -83,7 +85,9 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
             landValue = newCostOfLand();
 
             year++;
+            bushelOfGrain = bushelOfGrain + harvested - eatenByRats;
             printSummary(year,starvationDeaths, numOfImmigrant, people, harvested, eatenByRats, bushelOfGrain, acresOfLand, landValue);
+
         }
 
         gameSummary();
@@ -112,7 +116,7 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
         StringBuilder sb = new StringBuilder();
         sb.append("O great Hammurabi!\n");
         sb.append("You are in year " + currentYear + " of your ten year rule\n");
-        sb.append("In the previous year" + starvationDeaths + " people starved to death.\n");
+        sb.append("In the previous year " + starvationDeaths + " people starved to death.\n");
         sb.append("In the previous year " + immigrants + " people entered the kingdom.\n");
         sb.append("The population is now " + currentPop + ".\n");
         sb.append("We harvested " + harvest + " bushels at " + (harvest/land) + " bushels per acre.\n");
