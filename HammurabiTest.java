@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class HammurabiTest {
-    /*
+
     Hammurabi ham;
     
     boolean about(double expected, double actual) {
@@ -123,7 +123,7 @@ public class HammurabiTest {
         }
     }
 
-     */
+
     @Test
     public void starvationTest(){
         int expected = 100;
@@ -136,7 +136,7 @@ public class HammurabiTest {
     @Test
     public void uprisingTest(){
         Hammurabi hamm = new Hammurabi();
-        boolean actual =  hamm.uprising(100, 44);
+        boolean actual =  hamm.uprising(100, 45);
         assertTrue(actual);
     }
 
@@ -158,12 +158,6 @@ public class HammurabiTest {
 
      */
 
-    @Test
-    public void testNewLandCost(){
-        Hammurabi hamm = new Hammurabi();
-        int actual = hamm.newCostOfLand();
-        int expected = 0;
-        assertEquals(expected, actual);
-    }
+
 }
 

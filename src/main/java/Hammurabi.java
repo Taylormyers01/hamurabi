@@ -14,7 +14,8 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
     boolean uprising = false;
     int overallStarvDeath = 0;
     public static void main(String[] args) {
-        logger.setLevel(Level.INFO);
+        //logger.setLevel(Level.INFO);
+        logger.setLevel(Level.OFF);
         new Hammurabi().playGame();
     }
 
@@ -76,7 +77,7 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
             }
 
             //figures out how much harvest we get
-            int harvested = harvest(acresOfLand, bushelOfGrain); // not sure why this takes 2 params
+            int harvested = harvest(acresOfLand);
 
 
             //Figure out how much if any grain is eaten by rats
@@ -132,8 +133,8 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
     }
     public int grainEatenByRats(int bushels) {
         double percentEaten = 0;
-        if(rand.nextInt(100)+1 >= 40){
-            percentEaten = rand.nextInt(21) + 10;
+        if(rand.nextInt(100)+1 <= 40){
+            percentEaten = (double)rand.nextInt(21) + 10.0;
             logger.info(percentEaten +"% of grains eaten");
             percentEaten = percentEaten/100;
         }
@@ -146,7 +147,7 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
         return 0;
     }
 
-    public int harvest(int acres, int bushelsUsedAsSeed){
+    public int harvest(int acres){
         int bushelsPerAcre = rand.nextInt(6) + 1;
         logger.info(bushelsPerAcre + " is the bushels per acre");
         return acres* bushelsPerAcre;
